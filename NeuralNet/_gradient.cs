@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
- 
+
 
 namespace NeuralNet
 {
@@ -10,7 +10,7 @@ namespace NeuralNet
 
         public static double f(double x) { return Math.Tanh(Math.Tan(x + Math.Sin(x) / 100)) * x - .7; }
         public static double df(double x) { return (f(x + E) - f(x)) / E; }
-    
+
 
         public static void GradEstimation(Graphique G)
         {
@@ -55,7 +55,7 @@ namespace NeuralNet
         }
 
 
-
+        // x^2 + 0.4y^2 + 0.2x - 0.2xy + 0.1
         public static double Fnt(double x, double y)
         { return x * x + 0.4 * y * y + 0.2 * x - 0.2 * x * y + 0.1; }
         public static double dFntx(double x, double y) { return 2 * x + 0.2 - 0.2 * y; }
@@ -67,29 +67,56 @@ namespace NeuralNet
             G.ClearWhite();
             DrawFnt2D(Fnt);
             G.DrawAxis();
-            double gamma = 0.00000001; // step size multiplier
-            double precision = 0.00001; // range limit
+            var r = new Random();
 
-            double x = 0;
-            double y = 0;
+            double gamma = .1; // step size multiplier
+            //double precision = .1; // range limit
+
+            double x = r.NextDouble() - 0.5;
+            double y = r.NextDouble() - 0.5;
             double z = Fnt(x, y);
 
-            while (z > precision)
+            for (int i = 0; i < 30; i++)
             {
-                x += x - gamma * dFntx(x, y);
-                y += y - gamma * dFnty(x, y);
+                x += -gamma * dFntx(x, y);
+                y += -gamma * dFnty(x, y);
                 z = Fnt(x, y);
                 G.Cross(x, y, Color.White);
             }
         }
-        
+
         public static double Fntmax(double x, double y)
         {
-            double v1 = x*x + 0.4*y*y + 0.1;
+            double v1 = x * x + 0.4 * y * y + 0.1;
             double v2 = 0.5 * x + 0.4 * y + 0.2;
 
             return Math.Max(v1, v2);
         }
+
+        public static double dFntmaxx(double x, double y)
+        {
+            double v1 = 2 * x;
+            double v2 = 0.5;
+
+            return Math.Max(v1, v2);
+        }
+
+        public static double dFntmaxy(double x, double y)
+        {
+            double v1 = 0.4 * 2 * y;
+            double v2 = 0.4;
+
+            return Math.Max(v1, v2);
+        }
+
+        public static double Fntv1(double x, double y) { return x * x + 0.4 * y * y + 0.1; }
+        public static double Fntv2(double x, double y) { return 0.5 * x + 0.4 * y + 0.2; }
+
+        public static double dFntv1x(double x, double y) { return 2 * x; }
+        public static double dFntv1y(double x, double y) { return 0.4 * 2 * y; }
+
+        public static double dFntv2x(double x, double y) { return 0.5; }
+        public static double dFntv2y(double x, double y) { return 0.4; }
 
         public static void Optim2Dmax(Graphique G)
         {
@@ -97,12 +124,29 @@ namespace NeuralNet
             DrawFnt2D(Fntmax);
             G.DrawAxis();
 
-            double x = Utils.RND();
-            double y = Utils.RND();
-            G.Cross(x, y, Color.White);
+            var r = new Random();
+
+            double gamma = .01; // step size multiplier
+
+            double x = r.NextDouble() - 0.5;
+            double y = r.NextDouble() - 0.5;
+            double z = Fntmax(x, y);
 
             ///////////////////////////////////////////////////////////////////
 
+            for (int i = 0; i < 1000; i++)
+            {
+                if (Fntmax(x, y) == Fntv1(x, y))
+                {
+                    x += -gamma * dFntv1x(x, y);
+                    y += -gamma * dFntv1y(x, y);
+                }
+                else {
+                    x += -gamma * dFntv2x(x, y);
+                    y += -gamma * dFntv2y(x, y);
+                }
+                G.Cross(x, y, Color.White);
+            }
 
             ///////////////////////////////////////////////////////////////////
         }
@@ -152,9 +196,9 @@ namespace NeuralNet
             G.DrawAxis();
         }
 
-        
+
         //////////////////////////////////////////////
-        
+
         public delegate double FntXY(double x, double y);
 
 
