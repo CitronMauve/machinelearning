@@ -56,11 +56,19 @@ namespace NeuralNet
         public static void test4(Graphique G)
         {
             G.ClearBlack();
+            /*
             float[,] W = new float[3, 3]
             {
                 {  1, 0, 0 },
                 { -1, 0, 0 },
-                {  1, 1, 0 }
+                {  1f, 0f, 0 }
+            };
+            */
+            float[,] W = new float[3, 3]
+            {
+                {  1, 0f, 0f },
+                { -1, 0f, 0f },
+                {  1f, 0.8f, 0f }
             };
             OneLayer.DrawScore(W);
             OneLayer.LevelSet(W, 0.5f);

@@ -103,8 +103,11 @@ namespace NeuralNet
                     float y = G.YPixToVal(yecran);
 
                     float[] sco = new float[3];
-                    for (int i = 0 ; i < 3 ; i++)
-                        sco[i] = W[i,0]*x + W[i,1] * y + W[i,2];
+                    for (int i = 0; i < 3; i++)
+                    {
+                        sco[i] = W[i, 0] * x + W[i, 1] * y + W[i, 2];
+
+                    }
                     int first = 0;
                     int second = 1;
 
@@ -120,7 +123,8 @@ namespace NeuralNet
                     float h = sco[first]-sco[second];
                     h *= 4;
                     Utils.Inside(0,1,ref h);
-                    
+
+
 
 
                     int[,] Legende = { {150,150,255},
@@ -130,7 +134,6 @@ namespace NeuralNet
                     int RR = (int)(Legende[cat,0]*h);
                     int GG = (int)(Legende[cat,1]*h);
                     int BB = (int)(Legende[cat,2]*h);
-
 
                     Color c = Color.FromArgb(RR, GG, BB);
                     G.SetPixel(xecran, yecran, c);
