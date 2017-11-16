@@ -31,10 +31,10 @@ namespace NeuralNet
             {
                 {  1, 0, 0 },
                 { -1, 0, 0 },
-                {  0, 1, 0 }
+                {  0, 1f, 0 }
             };
             OneLayer.DrawScore(W);
-            OneLayer.LevelSet(W, 0.5f);
+            OneLayer.LevelSet(W, 0.9f);
 
             G.DrawAxis();
         }
@@ -45,8 +45,8 @@ namespace NeuralNet
             float[,] W = new float[3, 3]
            {
                 {  1, 0, 0 },
-                { -1, 0, 0 },
-                {  0, 1, 0.4f }
+                { -1, 0, 1.5f },
+                {  0, 1, 0 }
            };
             OneLayer.DrawScore(W);
             OneLayer.LevelSet(W, 0.5f);
@@ -56,22 +56,22 @@ namespace NeuralNet
         public static void test4(Graphique G)
         {
             G.ClearBlack();
-            /*
+            
             float[,] W = new float[3, 3]
             {
                 {  1, 0, 0 },
                 { -1, 0, 0 },
-                {  1f, 0f, 0 }
+                {  1f, 1f, 0 }
             };
-            */
-            float[,] W = new float[3, 3]
+            
+            /*float[,] W = new float[3, 3]
             {
                 {  1, 0f, 0f },
                 { -1, 0f, 0f },
                 {  1f, 0.8f, 0f }
-            };
+            };*/
             OneLayer.DrawScore(W);
-            OneLayer.LevelSet(W, 0.5f);
+            OneLayer.LevelSet(W, 0.4f);
             G.DrawAxis();
         }
 
@@ -108,6 +108,41 @@ namespace NeuralNet
                     G.SetPixel(xecran, yecran, Utils.ScoreToColor(score, CAT));
                 }
         }
+
+        /*
+            fct scores_hinge(W, X, C, D)
+            {
+	            score = [];
+	            for (k = 0; k < W.length; ++k)
+	            {
+		            s = 0;
+		            for (n = 0; n < W[0].length; ++n)
+		            {
+			            s+= W[k, n] * X[n];
+		            }
+		            score.append(s);
+	            }
+
+	            HL = []
+                for(int i = 0; i < W.length; i++){
+                    hinge = 0
+	                for(j = 0; j < W[0].length; ++j)
+	                {
+		                if(max != C)
+                            hinge += max(0, D + score[j] - score[C])
+	                }
+                    HL.append(hinge)
+                }
+
+	            return score, HL
+            }
+
+            def gradL(H, X, C)
+            {
+                dL/dW
+            }
+         */
+
 
 
     }
